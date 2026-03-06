@@ -1,0 +1,243 @@
+.panel {
+  width: 260px;
+  flex-shrink: 0;
+  background: var(--color-bg-panel);
+  border-right: 1px solid var(--border-subtle);
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--color-bg-panel);
+}
+
+.panel::-webkit-scrollbar {
+  width: 4px;
+}
+
+.panel::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--radius-sm);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 14px 10px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.title {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.clearBtn {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  background: none;
+  border: 1px solid rgba(142, 159, 178, 0.3);
+  border-radius: var(--radius-sm);
+  padding: 2px 8px;
+  cursor: pointer;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.clearBtn:hover {
+  color: var(--color-text-secondary);
+  border-color: rgba(200, 214, 229, 0.5);
+}
+
+.count {
+  padding: var(--space-sm) 14px;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-faint);
+  border-bottom: 1px solid rgba(0, 155, 255, 0.08);
+}
+
+.section {
+  padding: var(--space-md) 14px;
+  border-bottom: 1px solid rgba(0, 155, 255, 0.08);
+}
+
+.sectionTitle {
+  margin: 0 0 10px;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* Nation */
+.nationList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.nationBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 5px var(--space-sm);
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  text-align: left;
+  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  width: 100%;
+}
+
+.nationBtn:hover {
+  background: rgba(0, 155, 255, 0.08);
+  border-color: var(--border-medium);
+  color: var(--color-text-secondary);
+}
+
+.nationBtn.active {
+  background: rgba(0, 155, 255, 0.15);
+  border-color: var(--border-strong);
+  color: var(--color-text-primary);
+}
+
+.nationFlag {
+  width: 24px;
+  height: 16px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.nationLabel {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Type */
+.typeList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.typeBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 6px var(--space-sm);
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  text-align: left;
+  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  width: 100%;
+}
+
+.typeBtn:hover {
+  background: rgba(0, 155, 255, 0.08);
+  border-color: var(--border-medium);
+  color: var(--color-text-secondary);
+}
+
+.typeBtn.active {
+  background: rgba(0, 155, 255, 0.15);
+  border-color: var(--border-strong);
+  color: var(--color-text-primary);
+}
+
+.typeBtn[data-type='Destroyer'].active {
+  border-color: rgba(77, 182, 172, 0.6);
+  background: rgba(77, 182, 172, 0.12);
+  color: var(--color-type-destroyer);
+}
+
+.typeBtn[data-type='Cruiser'].active {
+  border-color: rgba(66, 165, 245, 0.6);
+  background: rgba(66, 165, 245, 0.12);
+  color: var(--color-type-cruiser);
+}
+
+.typeBtn[data-type='Battleship'].active {
+  border-color: rgba(239, 124, 76, 0.6);
+  background: rgba(239, 124, 76, 0.12);
+  color: var(--color-type-battleship);
+}
+
+.typeBtn[data-type='AirCarrier'].active {
+  border-color: rgba(171, 71, 188, 0.6);
+  background: rgba(171, 71, 188, 0.12);
+  color: var(--color-type-carrier);
+}
+
+.typeBtn[data-type='Submarine'].active {
+  border-color: rgba(102, 187, 106, 0.6);
+  background: rgba(102, 187, 106, 0.12);
+  color: var(--color-type-submarine);
+}
+
+.typeIcon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  opacity: 0.75;
+  flex-shrink: 0;
+}
+
+.typeBtn.active .typeIcon {
+  opacity: 1;
+}
+
+/* Tier */
+.tierGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+
+.tierBtn {
+  padding: 5px 2px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0.04em;
+  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.tierBtn:hover {
+  background: rgba(0, 155, 255, 0.1);
+  border-color: rgba(0, 155, 255, 0.35);
+  color: var(--color-text-secondary);
+}
+
+.tierBtn.active {
+  background: rgba(197, 160, 40, 0.2);
+  border-color: rgba(197, 160, 40, 0.6);
+  color: var(--color-gold);
+}
+
+.tierBtnStar {
+  font-size: 14px;
+}
+
+.tierBtnStar.active {
+  background: rgba(255, 152, 0, 0.15);
+  border-color: rgba(255, 152, 0, 0.5);
+  color: var(--color-orange);
+}

@@ -1,0 +1,49 @@
+@import './styles/variables.css';
+@import './styles/breakpoints.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background: var(--color-bg-base);
+  color: var(--color-text-secondary);
+  font-family: var(--font-family), sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 1px solid rgba(0, 155, 255, 0.7);
+  outline-offset: 2px;
+}
+
+p {
+  margin: 0;
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+}
+
+img {
+  display: block;
+}

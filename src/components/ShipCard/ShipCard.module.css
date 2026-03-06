@@ -1,0 +1,170 @@
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(160deg, var(--color-bg-card) 0%, var(--color-bg-card-dark) 100%);
+  border: 1px solid var(--border-default);
+  border-top: 2px solid var(--type-color, var(--color-type-cruiser));
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+  height: 100%;
+  /* button element resets */
+  padding: 0;
+  font: inherit;
+  text-align: left;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 12px rgba(0, 155, 255, 0.15);
+  border-color: var(--border-medium);
+}
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: var(--space-sm) 10px 0;
+}
+
+.tier {
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(200, 214, 229, 0.25);
+  border-radius: var(--radius-sm);
+  padding: 1px 6px;
+  letter-spacing: 0.05em;
+  min-width: 24px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.tierStar {
+  color: var(--color-orange);
+  border-color: rgba(255, 152, 0, 0.5);
+  font-size: var(--font-size-lg);
+}
+
+.badges {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.badgePremium {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-gold-premium);
+  background: rgba(245, 200, 66, 0.12);
+  border: 1px solid rgba(245, 200, 66, 0.4);
+  border-radius: var(--radius-sm);
+  padding: 1px 5px;
+}
+
+.badgeSpecial {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-orange);
+  background: rgba(255, 152, 0, 0.12);
+  border: 1px solid rgba(255, 152, 0, 0.4);
+  border-radius: var(--radius-sm);
+  padding: 1px 5px;
+}
+
+.imageWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm) var(--space-md);
+  min-height: 90px;
+}
+
+.shipImage {
+  width: 100%;
+  max-height: 110px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0, 100, 200, 0.25));
+}
+
+.imagePlaceholder {
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2a4f7a;
+}
+
+.imagePlaceholder svg {
+  width: 100%;
+  height: 100%;
+}
+
+.info {
+  padding: var(--space-sm) 10px 10px;
+  border-top: 1px solid var(--border-subtle);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.name {
+  margin: 0 0 6px;
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+}
+
+.nationBadge,
+.typeBadge {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-width: 0;
+}
+
+.flag {
+  width: 20px;
+  height: 14px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.typeIcon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  opacity: 0.85;
+  flex-shrink: 0;
+}
+
+.nationName,
+.typeName {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

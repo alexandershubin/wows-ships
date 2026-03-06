@@ -1,0 +1,7 @@
+/*
+  Breakpoints (reference — use in component CSS modules):
+    480px   small phones      @media (max-width: 480px)
+    640px   phones/tablets    @media (max-width: 640px)
+    900px   tablets           @media (max-width: 900px)
+    1200px  desktops          @media (max-width: 1200px)
+*/
