@@ -82,7 +82,7 @@ describe('fetchVehicles', () => {
     await fetchVehicles(undefined, onEntries);
     expect(onEntries).toHaveBeenCalled();
 
-    const allEntries = onEntries.mock.calls.flatMap((call: unknown[]) => call[0]);
+    const allEntries = onEntries.mock.calls.flatMap((call: unknown[]) => call[0]) as { id: string }[];
     expect(allEntries).toHaveLength(2);
     expect(allEntries[0].id).toBe('123');
     expect(allEntries[1].id).toBe('456');
