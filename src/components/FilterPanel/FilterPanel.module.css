@@ -9,6 +9,7 @@
   flex-direction: column;
   scrollbar-width: thin;
   scrollbar-color: var(--scrollbar-thumb) var(--color-bg-panel);
+  height: 100%;
 }
 
 .panel::-webkit-scrollbar {
