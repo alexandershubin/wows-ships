@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { Vehicle } from '../../types';
 import { useShipData } from '../../hooks/useShipData';
 import { getShipImageUrl, getShipLargeImageUrl } from '../../images';
 import ShipPlaceholder from '../../icons/ShipPlaceholder';
-import { toRoman, hideImageOnError } from '../../utils';
+import { toRoman, hideImageOnError } from '../../utils/helpers';
 import styles from './ShipModal.module.css';
 
 interface Props {
@@ -22,21 +22,43 @@ export default function ShipModal({ ship, onClose }: Props) {
   const largeImageUrl = getShipLargeImageUrl(mediaPath, ship.icons);
   const hasSeparateLarge = largeImageUrl && largeImageUrl !== mediumImageUrl;
 
+  const panelRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     closeBtnRef.current?.focus();
   }, []);
 
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', onKeyDown);
-    return () => document.removeEventListener('keydown', onKeyDown);
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      onClose();
+      return;
+    }
+    if (e.key === 'Tab' && panelRef.current) {
+      const focusable = panelRef.current.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
   }, [onClose]);
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
 
   return (
     <div className={styles.backdrop} onClick={onClose} data-testid="modal-backdrop">
       <div
+        ref={panelRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="ship-modal-name"
@@ -66,7 +88,6 @@ export default function ShipModal({ ship, onClose }: Props) {
                   aria-hidden="true"
                   className={`${styles.shipImageLarge} ${largeLoaded ? styles.shipImageLargeVisible : ''}`}
                   onLoad={() => setLargeLoaded(true)}
-                  onError={() => { /* silently ignore, medium remains */ }}
                 />
               )}
             </div>

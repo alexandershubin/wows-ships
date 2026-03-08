@@ -1,4 +1,4 @@
-import { useTransition, useState } from 'react';
+import { useEffect, useTransition, useState, type ChangeEvent } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import { setSearch } from '../../store/filtersSlice';
 import styles from './Header.module.css';
@@ -10,11 +10,15 @@ interface Props {
 
 export default function Header({ onToggleSidebar, sidebarOpen }: Props) {
   const dispatch = useAppDispatch();
-  const currentSearch = useAppSelector((s) => s.filters.search);
+  const currentSearch = useAppSelector((item) => item.filters.search);
   const [localSearch, setLocalSearch] = useState(currentSearch);
   const [isPending, startTransition] = useTransition();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    setLocalSearch(currentSearch);
+  }, [currentSearch]);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setLocalSearch(value);
     startTransition(() => {

@@ -8,12 +8,6 @@ interface Props {
 
 export default function ErrorBanner({ message, onRetry }: Props) {
   const [retrying, setRetrying] = useState(false);
-  const [prevMessage, setPrevMessage] = useState(message);
-
-  if (message !== prevMessage) {
-    setPrevMessage(message);
-    setRetrying(false);
-  }
 
   const handleRetry = () => {
     setRetrying(true);

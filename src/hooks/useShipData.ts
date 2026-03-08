@@ -1,7 +1,7 @@
 import type { Vehicle } from '../types';
 import { useAppSelector } from './useAppDispatch';
 import { getNationFlagUrl, getTypeIconUrl } from '../images';
-import { getShipType, isPremium, isSpecial, SHIP_TYPE_COLORS } from '../utils';
+import { getShipType, isPremium, isSpecial, SHIP_TYPE_COLORS } from '../utils/helpers';
 
 export interface ShipData {
   name: string;
@@ -17,7 +17,7 @@ export interface ShipData {
 }
 
 export function useShipData(ship: Vehicle): ShipData {
-  const { nations, vehicleTypes, mediaPath } = useAppSelector((s) => s.data);
+  const { nations, vehicleTypes, mediaPath } = useAppSelector((item) => item.data);
 
   const name = ship.localization.shortmark?.en ?? ship.name;
   const shipType = getShipType(ship.tags);

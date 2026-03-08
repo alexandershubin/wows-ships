@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { fetchMeta, fetchVehicles } from '../api';
-import { addStreamEntries, resetStream } from './vehicleStream';
+import { addStreamEntries, flushStream, resetStream } from './vehicleStream';
+import { getCachedVehicles, setCachedVehicles } from '../cache/vehicleCache';
 import type { Nation, Vehicle, VehicleType, LoadStatus } from '../types';
 
 interface DataState {
@@ -61,11 +62,28 @@ export const loadVehicles = createAsyncThunk<
   'data/loadVehicles',
   async (_, { dispatch, rejectWithValue }) => {
     try {
+      const cached = await getCachedVehicles();
+
+      if (cached) {
+        dispatch(setCachedVehiclesAction(cached));
+        fetchVehicles(
+          () => {},
+          () => {},
+        ).then((fresh) => {
+          dispatch(setRevalidatedVehicles(fresh));
+          setCachedVehicles(fresh);
+        }).catch(() => {});
+
+        return cached;
+      }
       resetStream();
-      return await fetchVehicles(
+      const vehicles = await fetchVehicles(
         (progress) => { dispatch(setVehiclesProgress(progress)); },
         (entries) => { addStreamEntries(entries); },
       );
+      flushStream();
+      setCachedVehicles(vehicles);
+      return vehicles;
     } catch (e) {
       return rejectWithValue(e instanceof Error ? e.message : 'Failed to load ships');
     }
@@ -85,6 +103,14 @@ const dataSlice = createSlice({
     setVehiclesProgress(state, action: PayloadAction<number>) {
       state.vehiclesProgress = action.payload;
     },
+    setCachedVehiclesAction(state, action: PayloadAction<Record<string, Vehicle>>) {
+      state.vehicles = action.payload;
+      state.vehiclesStatus = 'succeeded';
+      state.vehiclesProgress = 1;
+    },
+    setRevalidatedVehicles(state, action: PayloadAction<Record<string, Vehicle>>) {
+      state.vehicles = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -103,8 +129,10 @@ const dataSlice = createSlice({
         state.metaError = action.payload ?? action.error.message ?? 'Failed to load metadata';
       })
       .addCase(loadVehicles.pending, (state) => {
-        state.vehiclesStatus = 'loading';
-        state.vehiclesProgress = 0;
+        if (state.vehiclesStatus !== 'succeeded') {
+          state.vehiclesStatus = 'loading';
+          state.vehiclesProgress = 0;
+        }
         state.vehiclesError = null;
       })
       .addCase(loadVehicles.fulfilled, (state, action) => {
@@ -113,11 +141,13 @@ const dataSlice = createSlice({
         state.vehicles = action.payload;
       })
       .addCase(loadVehicles.rejected, (state, action) => {
-        state.vehiclesStatus = 'failed';
-        state.vehiclesError = action.payload ?? action.error.message ?? 'Failed to load ships';
+        if (Object.keys(state.vehicles).length === 0) {
+          state.vehiclesStatus = 'failed';
+          state.vehiclesError = action.payload ?? action.error.message ?? 'Failed to load ships';
+        }
       });
   },
 });
 
-export const { setVehiclesProgress } = dataSlice.actions;
+export const { setVehiclesProgress, setCachedVehiclesAction, setRevalidatedVehicles } = dataSlice.actions;
 export default dataSlice.reducer;

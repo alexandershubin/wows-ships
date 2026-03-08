@@ -19,44 +19,30 @@ interface RawVehicle {
   localization: Vehicle['localization'];
 }
 
-/**
- * Scans `buf` for complete `"key": { ... }` JSON object entries.
- * Uses brace-depth counting (string-aware) so it handles nested objects and
- * escaped quotes correctly without a full parser.
- *
- * Returns an array of [key, rawJson] pairs for every complete entry found,
- * and mutates `buf` in place (via return) to the remaining unconsumed tail.
- */
 function extractEntries(buf: string): { entries: [string, string][]; rest: string } {
   const entries: [string, string][] = [];
   let i = 0;
 
   while (i < buf.length) {
-    // Skip commas and whitespace between entries
     while (i < buf.length && (buf[i] === ',' || buf[i] === '\n' || buf[i] === '\r' || buf[i] === '\t' || buf[i] === ' ')) {
       i++;
     }
 
     if (i >= buf.length) break;
 
-    // End of the data object — stop consuming
     if (buf[i] === '}') break;
 
-    // Expect start of a quoted key
     if (buf[i] !== '"') break;
 
-    // Find the closing quote of the key
     const keyStart = i + 1;
     const keyEnd = buf.indexOf('"', keyStart);
     if (keyEnd === -1) break; // incomplete key, need more data
 
     const key = buf.slice(keyStart, keyEnd);
 
-    // Find the opening brace of the value object (after the colon)
     const braceIdx = buf.indexOf('{', keyEnd + 1);
     if (braceIdx === -1) break; // incomplete, need more data
 
-    // Walk forward counting brace depth, skipping string contents
     let depth = 0;
     let inStr = false;
     let escaped = false;
@@ -75,7 +61,7 @@ function extractEntries(buf: string): { entries: [string, string][]; rest: strin
       }
     }
 
-    if (end === -1) break; // object not yet complete, need more data
+    if (end === -1) break;
 
     entries.push([key, buf.slice(braceIdx, end + 1)]);
     i = end + 1;
@@ -146,7 +132,6 @@ export async function fetchVehicles(
     }
   }
 
-  // Final full parse — single JSON.parse on the complete response
   const text = await new Blob(chunks).text();
   const json: { status: string; data: Record<string, RawVehicle> } = JSON.parse(text);
   if (json.status !== 'ok') throw new Error('API returned error status');

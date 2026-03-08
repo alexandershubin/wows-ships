@@ -1,3 +1,6 @@
+import type { SyntheticEvent } from 'react';
+import { SHIP_TYPES, type ShipTypeKey } from '../types';
+
 export const ROMAN: Record<number, string> = {
   1: 'I',
   2: 'II',
@@ -17,8 +20,7 @@ export function toRoman(tier: number): string {
 }
 
 export function getShipType(tags: string[]): string {
-  const types = ['Destroyer', 'Cruiser', 'Battleship', 'AirCarrier', 'Submarine'];
-  return tags.find((t) => types.includes(t)) ?? 'Unknown';
+  return tags.find((t): t is ShipTypeKey => SHIP_TYPES.includes(t as ShipTypeKey)) ?? 'Unknown';
 }
 
 export function isPremium(tags: string[]): boolean {
@@ -37,17 +39,7 @@ export const SHIP_TYPE_COLORS: Record<string, string> = {
   Submarine:  'var(--color-type-submarine)',
 };
 
-export function hideImageOnError(e: React.SyntheticEvent<HTMLImageElement>): void {
+export function hideImageOnError(e: SyntheticEvent<HTMLImageElement>): void {
   e.currentTarget.style.display = 'none';
 }
 
-export function debounce<T extends (...args: Parameters<T>) => void>(
-  fn: T,
-  delay: number
-): (...args: Parameters<T>) => void {
-  let timer: ReturnType<typeof setTimeout>;
-  return (...args: Parameters<T>) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => fn(...args), delay);
-  };
-}

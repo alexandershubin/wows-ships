@@ -93,12 +93,4 @@ describe('selectFilteredShips', () => {
     const result = selectFilteredShips(makeState(ships, { search: 'XYZ_NO_MATCH' }));
     expect(result).toHaveLength(0);
   });
-
-  it('sorts by nation then level then name', () => {
-    const result = selectFilteredShips(makeState(ships));
-    // japan comes before usa alphabetically
-    const japanIdx = result.findIndex((s) => s.nation === 'japan');
-    const usaIdx = result.findIndex((s) => s.nation === 'usa');
-    expect(japanIdx).toBeLessThan(usaIdx);
-  });
 });

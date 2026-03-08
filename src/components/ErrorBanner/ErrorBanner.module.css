@@ -36,7 +36,7 @@
   margin: 0;
   font-size: 18px;
   font-weight: 700;
-  color: #e87d7d;
+  color: var(--color-red-light);
   letter-spacing: 0.04em;
 }
 
@@ -44,7 +44,7 @@
   margin: 0;
   font-size: var(--font-size-sm);
   font-family: monospace;
-  color: #c84040;
+  color: var(--color-red-dark);
   background: rgba(0, 0, 0, 0.3);
   padding: var(--space-xs) 10px;
   border-radius: var(--radius-sm);
@@ -61,7 +61,7 @@
   background: rgba(200, 60, 60, 0.15);
   border: 1px solid rgba(200, 60, 60, 0.4);
   border-radius: var(--radius-md);
-  color: #e87d7d;
+  color: var(--color-red-light);
   font-size: var(--font-size-md);
   font-weight: 600;
   letter-spacing: 0.05em;

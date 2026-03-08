@@ -20,6 +20,9 @@
   --color-blue:        rgba(0, 155, 255, 1);
   --color-orange:      #ff9800;
   --color-red:         #c83232;
+  --color-red-light:   #e87d7d;
+  --color-red-dark:    #c84040;
+  --color-placeholder: #2a4f7a;
 
   /* ── Ship type colors ── */
   --color-type-destroyer:  #4db6ac;
@@ -62,4 +65,7 @@
   --scrollbar-track: var(--color-bg-base);
   --scrollbar-thumb: #1e3a5f;
   --scrollbar-thumb-hover: #2a4f7a;
+
+  /* ── Component-level (set via inline style) ── */
+  --type-color: var(--color-type-cruiser);
 }

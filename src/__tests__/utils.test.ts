@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { debounce, getShipType, isPremium, isSpecial, toRoman } from '../utils';
+import { getShipType, isPremium, isSpecial, toRoman } from '../utils/helpers';
 
 describe('toRoman', () => {
   it('converts tiers 1-10 to Roman numerals', () => {
@@ -55,20 +55,5 @@ describe('isSpecial', () => {
   it('returns false when no special tag', () => {
     expect(isSpecial(['premium'])).toBe(false);
     expect(isSpecial([])).toBe(false);
-  });
-});
-
-describe('debounce', () => {
-  it('delays function execution', async () => {
-    let callCount = 0;
-    const fn = debounce(() => { callCount++; }, 50);
-
-    fn();
-    fn();
-    fn();
-    expect(callCount).toBe(0);
-
-    await new Promise((r) => setTimeout(r, 100));
-    expect(callCount).toBe(1);
   });
 });

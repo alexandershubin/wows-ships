@@ -4,7 +4,7 @@
   height: 100dvh;
   background: var(--color-bg-base);
   color: var(--color-text-secondary);
-  font-family: var(--font-family);
+  font-family: var(--font-family), sans-serif;
   overflow: hidden;
 }
 

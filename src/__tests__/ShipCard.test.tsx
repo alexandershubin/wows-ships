@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
+import type { ReactElement } from 'react';
 import ShipCard from '../components/ShipCard/ShipCard';
 import dataReducer from '../store/dataSlice';
 import filtersReducer from '../store/filtersSlice';
@@ -48,7 +49,7 @@ const mockVehicleTypes = {
 
 const noop = () => {};
 
-function renderWithStore(ui: React.ReactElement) {
+function renderWithStore(ui: ReactElement) {
   const store = configureStore({
     reducer: { data: dataReducer, filters: filtersReducer },
     preloadedState: {

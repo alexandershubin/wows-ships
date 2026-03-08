@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, lazy, Suspense, type UIEvent } from 'react';
 import type { Vehicle } from '../../types';
 import { useAppSelector } from '../../hooks/useAppDispatch';
 import { useFilteredShips } from '../../hooks/useFilteredShips';
 import { useContainerSize } from '../../hooks/useContainerSize';
 import { useVirtualGrid } from '../../hooks/useVirtualGrid';
 import ShipCard from '../ShipCard/ShipCard';
+import SkeletonCard from '../ShipCard/SkeletonCard';
 import styles from './ShipGrid.module.css';
 
 const ShipModal = lazy(() => import('../ShipModal/ShipModal'));
@@ -15,6 +16,7 @@ const GAP = 12;
 
 export default function ShipGrid() {
   const ships = useFilteredShips();
+  const vehiclesStatus = useAppSelector((status) => status.data.vehiclesStatus);
   const [selectedShip, setSelectedShip] = useState<Vehicle | null>(null);
   const handleSelectShip = useCallback((ship: Vehicle) => setSelectedShip(ship), []);
   const handleCloseModal = useCallback(() => setSelectedShip(null), []);
@@ -25,9 +27,11 @@ export default function ShipGrid() {
     useContainerSize<HTMLDivElement>();
 
   const columns = Math.max(1, Math.floor((containerWidth + GAP) / (CARD_MIN_WIDTH + GAP)));
+  const isLoading = vehiclesStatus === 'loading';
+  const skeletonCount = isLoading ? columns : 0;
 
   const { startIndex, endIndex, totalHeight, offsetY } = useVirtualGrid({
-    itemCount: ships.length,
+    itemCount: ships.length + skeletonCount,
     columns,
     rowHeight: CARD_HEIGHT,
     gap: GAP,
@@ -36,7 +40,7 @@ export default function ShipGrid() {
     overscan: 3,
   });
 
-  const onScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
+  const onScroll = useCallback((e: UIEvent<HTMLDivElement>) => {
     scrollTopRef.current = e.currentTarget.scrollTop;
     if (rafIdRef.current === null) {
       rafIdRef.current = requestAnimationFrame(() => {
@@ -54,22 +58,13 @@ export default function ShipGrid() {
     };
   }, []);
 
-  const visibleShips = ships.slice(startIndex, endIndex);
   const cardWidth = columns > 1 ? `calc((100% - ${GAP * (columns - 1)}px) / ${columns})` : '100%';
 
-  const vehiclesStatus = useAppSelector((s) => s.data.vehiclesStatus);
-
-  if (ships.length === 0) {
+  if (ships.length === 0 && !isLoading) {
     return (
       <div className={styles.empty}>
-        {vehiclesStatus === 'loading' ? (
-          <p>Loading ships…</p>
-        ) : (
-          <>
-            <p>No ships match your filters.</p>
-            <p className={styles.emptyHint}>Try adjusting search or filter criteria.</p>
-          </>
-        )}
+        <p>No ships match your filters.</p>
+        <p className={styles.emptyHint}>Try adjusting search or filter criteria.</p>
       </div>
     );
   }
@@ -87,13 +82,14 @@ export default function ShipGrid() {
               gap: GAP,
             }}
           >
-            {visibleShips.map((ship) => (
-              <ShipCard
-                key={ship.id}
-                ship={ship}
-                onClick={handleSelectShip}
-              />
-            ))}
+            {Array.from({ length: endIndex - startIndex }, (_, i) => {
+              const idx = startIndex + i;
+              if (idx < ships.length) {
+                const ship = ships[idx];
+                return <ShipCard key={ship.id} ship={ship} onClick={handleSelectShip} />;
+              }
+              return <SkeletonCard key={`skeleton-${idx}`} />;
+            })}
           </div>
         </div>
       </div>

@@ -73,7 +73,6 @@
   color: var(--color-text-muted);
 }
 
-/* Nation */
 .nationList {
   display: flex;
   flex-direction: column;
@@ -122,7 +121,6 @@
   text-overflow: ellipsis;
 }
 
-/* Type */
 .typeList {
   display: flex;
   flex-direction: column;
@@ -199,7 +197,6 @@
   opacity: 1;
 }
 
-/* Tier */
 .tierGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

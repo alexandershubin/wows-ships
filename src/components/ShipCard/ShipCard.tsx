@@ -1,11 +1,9 @@
 import { memo, useState, type CSSProperties } from 'react';
-// Note: <button> wraps block-level content here intentionally —
-// browsers handle this correctly and it gives native keyboard/focus semantics.
 import type { Vehicle } from '../../types';
 import { useShipData } from '../../hooks/useShipData';
 import { getShipImageUrl } from '../../images';
 import ShipPlaceholder from '../../icons/ShipPlaceholder';
-import { toRoman, hideImageOnError } from '../../utils';
+import { toRoman, hideImageOnError } from '../../utils/helpers';
 import styles from './ShipCard.module.css';
 
 interface Props {

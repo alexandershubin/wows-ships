@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { SHIP_TYPES, TIERS } from '../../types';
 import { getNationFlagUrl, getTypeIconUrl } from '../../images';
-import { toRoman } from '../../utils';
+import { toRoman, hideImageOnError } from '../../utils/helpers';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import { clearFilters, toggleLevel, toggleNation, toggleType } from '../../store/filtersSlice';
 import { selectFilteredShips, selectTotalShipCount } from '../../store/selectors';
@@ -9,10 +9,10 @@ import styles from './FilterPanel.module.css';
 
 export default function FilterPanel() {
   const dispatch = useAppDispatch();
-  const { nations, vehicleTypes, mediaPath } = useAppSelector((s) => s.data);
-  const selectedNations = useAppSelector((s) => s.filters.nations);
-  const selectedTypes = useAppSelector((s) => s.filters.types);
-  const selectedLevels = useAppSelector((s) => s.filters.levels);
+  const { nations, vehicleTypes, mediaPath } = useAppSelector((item) => item.data);
+  const selectedNations = useAppSelector((item) => item.filters.nations);
+  const selectedTypes = useAppSelector((item) => item.filters.types);
+  const selectedLevels = useAppSelector((item) => item.filters.levels);
   const filteredCount = useAppSelector(selectFilteredShips).length;
   const totalCount = useAppSelector(selectTotalShipCount);
 
@@ -21,10 +21,10 @@ export default function FilterPanel() {
 
   const handleClear = useCallback(() => dispatch(clearFilters()), [dispatch]);
 
-  const visibleNations = nations.filter((n) => n.tags.includes('inTree'));
+  const visibleNations = nations.filter((nation) => nation.tags.includes('inTree'));
 
   return (
-    <aside className={styles.panel}>
+    <aside className={styles.panel} aria-label="Ship filters">
       <div className={styles.header}>
         <span className={styles.title}>Filters</span>
         {hasActiveFilters && (
@@ -65,9 +65,7 @@ export default function FilterPanel() {
                     alt={label}
                     className={styles.nationFlag}
                     loading="lazy"
-                    onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).style.display = 'none';
-                    }}
+                    onError={hideImageOnError}
                   />
                 )}
                 <span className={styles.nationLabel}>{label}</span>
@@ -99,9 +97,7 @@ export default function FilterPanel() {
                     alt={label}
                     className={styles.typeIcon}
                     loading="lazy"
-                    onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).style.display = 'none';
-                    }}
+                    onError={hideImageOnError}
                   />
                 )}
                 <span>{label}</span>
