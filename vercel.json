@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/wows-api/:path*",
-      "destination": "https://vortex.worldofwarships.eu/:path*"
+      "source": "/wows-api/(.*)",
+      "destination": "/api/proxy?path=$1"
     }
   ]
 }
