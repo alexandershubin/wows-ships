@@ -6,6 +6,7 @@ import { useContainerSize } from '../../hooks/useContainerSize';
 import { useVirtualGrid } from '../../hooks/useVirtualGrid';
 import ShipCard from '../ShipCard/ShipCard';
 import SkeletonCard from '../ShipCard/SkeletonCard';
+import { getShipImageUrl } from '../../images';
 import styles from './ShipGrid.module.css';
 
 const ShipModal = lazy(() => import('../ShipModal/ShipModal'));
@@ -28,7 +29,7 @@ export default function ShipGrid() {
 
   const columns = Math.max(1, Math.floor((containerWidth + GAP) / (CARD_MIN_WIDTH + GAP)));
   const isLoading = vehiclesStatus === 'loading';
-  const skeletonCount = isLoading ? columns : 0;
+  const skeletonCount = isLoading ? columns * 4 : 0;
 
   const { startIndex, endIndex, totalHeight, offsetY } = useVirtualGrid({
     itemCount: ships.length + skeletonCount,
@@ -57,6 +58,22 @@ export default function ShipGrid() {
       }
     };
   }, []);
+
+  const mediaPath = useAppSelector((item) => item.data.mediaPath);
+
+  useEffect(() => {
+    const preloadEnd = Math.min(ships.length, endIndex + columns * 3);
+    for (let i = endIndex; i < preloadEnd; i++) {
+      const ship = ships[i];
+      if (ship) {
+        const url = getShipImageUrl(mediaPath, ship.icons);
+        if (url) {
+          const img = new Image();
+          img.src = url;
+        }
+      }
+    }
+  }, [endIndex, ships, columns, mediaPath]);
 
   const cardWidth = columns > 1 ? `calc((100% - ${GAP * (columns - 1)}px) / ${columns})` : '100%';
 
